@@ -3,4 +3,7 @@ node_modules
 /coverage
 .prettierignore
 .stylelintignore
+.editorconfig
 .eslintignore
+.pnpmignore
+.pnpmrc
