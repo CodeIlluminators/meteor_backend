@@ -1,0 +1,124 @@
+{
+	"name": "meteor_backend",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"commit": "cz",
+		"precommit": "lint-staged",
+		"prepare": "husky install",
+		"prebuild": "rimraf dist logs",
+		"build:force": "nest build",
+		"build:check": "run-p build:force format:check",
+		"build": "run-p build:force format:write",
+		"start": "nest start",
+		"start:dev": "nest start --watch",
+		"start:debug": "nest start --debug --watch",
+		"start:prod": "node dist/main",
+		"sort-imports:list": "npx import-sort --list-different '**/*.{ts,js}'",
+		"sort-imports:write": "npx import-sort --write '**/*.{ts,js}'",
+		"format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+		"format:write": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+		"lint:check": "mkdir -p logs && eslint . --no-fix --output-file logs/eslint-check.log",
+		"lint:fix": "eslint . --fix",
+		"clean:check": "run-p sort-imports:check format:check lint:check",
+		"clean:write": "pnpm sort-imports:write && pnpm format:write",
+		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+		"test:e2e": "jest --config ./test/jest-e2e.json",
+		"test:cov": "jest --coverage",
+		"test:watch": "jest --watch",
+		"test": "jest"
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
+	"lint-staged": {
+		"*": ["pnpm run clean:write"]
+	},
+	"jest": {
+		"moduleFileExtensions": ["js", "json", "ts"],
+		"rootDir": "src",
+		"testRegex": ".*\\.spec\\.ts$",
+		"transform": {
+			"^.+\\.(t|j)s$": "ts-jest"
+		},
+		"collectCoverageFrom": ["**/*.(t|j)s"],
+		"coverageDirectory": "../coverage",
+		"testEnvironment": "node"
+	},
+	"license": "Apache-2.0",
+	"author": "CodeIlluminators <codeilluminators@gmail.com> (https://github.com/CodeIlluminators)",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeIlluminators/meteor_backend.git"
+	},
+	"bugs": {
+		"url": "https://github.com/CodeIlluminators/meteor_backend/issues"
+	},
+	"homepage": "https://github.com/CodeIlluminators/meteor_backend/readme",
+	"dependencies": {
+		"@nestjs/common": "^10.3.9",
+		"@nestjs/core": "^10.3.9",
+		"@nestjs/platform-express": "^10.3.9",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.14.1",
+		"compression": "^1.7.4",
+		"cookie-parser": "^1.4.6",
+		"csurf": "^1.11.0",
+		"express": "^4.19.2",
+		"express-rate-limit": "^7.3.1",
+		"helmet": "^7.1.0",
+		"nest-winston": "^1.10.0",
+		"npm-run-all": "^4.1.5",
+		"reflect-metadata": "^0.2.2",
+		"rimraf": "^5.0.7",
+		"rxjs": "^7.8.1",
+		"winston": "^3.13.0",
+		"winston-daily-rotate-file": "^5.0.0"
+	},
+	"engineStrict": true,
+	"engines": {
+		"node": ">= 20"
+	},
+	"devDependencies": {
+		"@nestjs/cli": "^10.3.2",
+		"@nestjs/schematics": "^10.1.1",
+		"@nestjs/testing": "^10.3.9",
+		"@types/cookie-parser": "^1.4.7",
+		"@types/express": "^4.17.21",
+		"@types/jest": "^29.5.12",
+		"@types/node": "^20.14.2",
+		"@types/supertest": "^6.0.2",
+		"@typescript-eslint/eslint-plugin": "^7.13.0",
+		"@typescript-eslint/parser": "^7.13.0",
+		"babylon": "^6.18.0",
+		"commitizen": "^4.3.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^8.57.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-airbnb-typescript": "^18.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-eslint-comments": "^3.2.0",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-jest": "^28.6.0",
+		"eslint-plugin-promise": "^6.2.0",
+		"eslint-plugin-unicorn": "^53.0.0",
+		"husky": "^9.0.11",
+		"import-sort": "^6.0.0",
+		"import-sort-cli": "^6.0.0",
+		"import-sort-parser-babylon": "^6.0.0",
+		"import-sort-parser-typescript": "^6.0.0",
+		"import-sort-style-module": "^6.0.0",
+		"jest": "^29.7.0",
+		"lint-staged": "^15.2.5",
+		"prettier": "^3.3.2",
+		"source-map-support": "^0.5.21",
+		"supertest": "^6.3.4",
+		"ts-jest": "^29.1.4",
+		"ts-loader": "^9.5.1",
+		"ts-node": "^10.9.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.4.5"
+	}
+}
