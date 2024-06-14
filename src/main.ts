@@ -1,4 +1,4 @@
-import { ValidationPipe } from "@nestjs/common";
+import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as compression from "compression";
 import * as cookieParser from "cookie-parser";
@@ -9,11 +9,15 @@ import { WinstonModule } from "nest-winston";
 import * as winston from "winston";
 
 import { AppModule } from "./app.module";
+import { ExtendedTransformInterceptor } from "./interceptors/extended-transform.interceptor";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { enableDebugLog, transports } from "./utility/logger";
 
 async function bootstrap(): Promise<void> {
-	const app = await NestFactory.create(AppModule);
+	const app: INestApplication = await NestFactory.create(AppModule);
+
+	app.useGlobalInterceptors(new ExtendedTransformInterceptor());
+
 	app.useLogger(
 		WinstonModule.createLogger({
 			format: winston.format.combine(
@@ -31,16 +35,18 @@ async function bootstrap(): Promise<void> {
 			],
 		}),
 	);
+
 	app.enableCors();
 	app.use(helmet());
 	app.use(compression());
+	app.use(cookieParser());
 	app.use(csurf({ cookie: true }));
+
 	const limiter: RateLimitRequestHandler = rateLimit({
 		windowMs: 5 * 60 * 1000, // 5 mins
 		max: 100,
 	});
 	app.use(limiter);
-	app.use(cookieParser());
 
 	app.useGlobalPipes(
 		new ValidationPipe({
