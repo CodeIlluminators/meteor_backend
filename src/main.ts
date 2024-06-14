@@ -57,6 +57,7 @@ async function bootstrap(): Promise<void> {
 	);
 
 	app.enableShutdownHooks();
+	app.setGlobalPrefix("api");
 
 	await app.listen(8000, "0.0.0.0");
 }
