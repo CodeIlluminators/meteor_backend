@@ -17,5 +17,8 @@ describe("AppController (e2e)", () => {
 	});
 
 	it("/ (GET)", () =>
-		request(app.getHttpServer()).get("/api").expect(200).expect("💖 Hello, MeteorAPI!"));
+		request(app.getHttpServer())
+			.get("/api")
+			.expect(200)
+			.expect("💖 Hello, MeteorAPI!"));
 });
