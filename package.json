@@ -33,7 +33,12 @@
 			"pnpm run clean:write"
 		]
 	},
-	"jest": {
+  "husky": {
+    "hooks": {
+      "post-commit": "sh .husky/post-commit.sh"
+    }
+  },
+  "jest": {
 		"moduleFileExtensions": [
 			"js",
 			"json",
