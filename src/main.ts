@@ -1,3 +1,5 @@
+// noinspection JSDeprecatedSymbols
+
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as compression from "compression";
@@ -9,13 +11,13 @@ import { WinstonModule } from "nest-winston";
 import * as winston from "winston";
 
 import { AppModule } from "./app.module";
-import { ExtendedTransformInterceptor } from "./interceptors/extended-transform.interceptor";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { enableDebugLog, transports } from "./utility/logger";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
+import { ExtendedTransformInterceptor } from "./common/interceptors/extended-transform.interceptor";
+import { transports } from "./utils/logger.util";
 
 async function bootstrap(): Promise<void> {
 	const app: INestApplication = await NestFactory.create(AppModule);
-
+	app.useGlobalFilters(new HttpExceptionFilter());
 	app.useGlobalInterceptors(new ExtendedTransformInterceptor());
 
 	app.useLogger(
