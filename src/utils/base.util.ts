@@ -1,3 +1,10 @@
+import {
+	ArrayToDictOptions,
+	ArrayToDictResult,
+	ValueCallback,
+	ValueCallbackIndexable,
+} from "../common/types";
+
 /**
  * Generates a random index within the range [0, arrayLength).
  * @param arrayLength - The length of the array for which to generate a random index.
@@ -36,3 +43,30 @@ export const calculateSize = (
 	// Convert the object to JSON string and measure its byte length using specified encoding
 	return Buffer.byteLength(JSON.stringify(object), encoding);
 };
+
+/**
+ * Converts an array of strings into a dictionary with the index as the key.
+ * Applies a callback function to each item when creating the dictionary.
+ *
+ * @template T - The type of the values in the resulting dictionary.
+ * @param items - The array of strings to convert.
+ * @param valueCallback - A function to apply to each item in the array or a record to use as values.
+ * @param options - Options to configure the behavior of the function.
+ * @returns A dictionary where the key is the index of the item in the array,
+ *          and the value is the result of the callback function.
+ */
+export function arrayToDict<T>(
+	items: string[],
+	valueCallback: ValueCallback<T> | ValueCallbackIndexable<T>,
+	options: ArrayToDictOptions = {},
+): ArrayToDictResult<T> {
+	const { isValueCallbackIndexable = false, useItemAsKey = false } = options;
+
+	return items.reduce<ArrayToDictResult<T>>((acc, item, index) => {
+		const key: string | number = useItemAsKey ? item : index;
+		acc[key] = isValueCallbackIndexable
+			? (valueCallback as ValueCallbackIndexable<T>)[item]
+			: (valueCallback as ValueCallback<T>)(item);
+		return acc;
+	}, {});
+}
